@@ -4,201 +4,371 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aadi 💜 Palak</title>
-
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:#0a0a0f;font-family:sans-serif;overflow:hidden;}
 
-.wrap{
-height:100vh;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-text-align:center;
-position:relative;
+#wrap{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
 }
 
-.title{color:#f0a0cc;}
+.title{color:#f0a0cc;font-size:20px;margin-bottom:4px;}
 .date{color:#aaa;font-size:12px;margin-bottom:20px;}
 
-.emoj{font-size:80px;margin-bottom:10px;}
-.q-text{color:#f0d8f0;font-size:22px;}
-.q-sub{color:#aaa;margin-bottom:20px;}
+.emoj{
+  font-size:80px;
+  margin-bottom:10px;
+  display:inline-block;
+  animation:emojPop 0.5s ease;
+}
+@keyframes emojPop{
+  0%{transform:scale(0) rotate(-20deg);opacity:0;}
+  70%{transform:scale(1.3) rotate(5deg);}
+  100%{transform:scale(1) rotate(0deg);opacity:1;}
+}
+
+.q-text{
+  color:#f0d8f0;
+  font-size:24px;
+  margin-bottom:6px;
+  animation:slideIn 0.4s ease;
+}
+@keyframes slideIn{
+  0%{transform:translateY(30px);opacity:0;}
+  100%{transform:translateY(0);opacity:1;}
+}
+
+.q-sub{
+  color:#aaa;
+  font-size:14px;
+  margin-bottom:24px;
+  animation:fadeIn 0.6s ease;
+}
+@keyframes fadeIn{
+  0%{opacity:0;}
+  100%{opacity:1;}
+}
 
 .yes-btn{
-background:#ff4da6;
-color:white;
-border:none;
-padding:12px 35px;
-border-radius:50px;
-cursor:pointer;
-z-index:10;
+  background:#ff4da6;
+  color:white;
+  border:none;
+  padding:13px 38px;
+  border-radius:50px;
+  cursor:pointer;
+  font-size:17px;
+  z-index:10;
+  position:relative;
+  animation:pulse 2s infinite;
 }
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(255,77,166,0.5);}
+  70%{box-shadow:0 0 0 14px rgba(255,77,166,0);}
+  100%{box-shadow:0 0 0 0 rgba(255,77,166,0);}
+}
+.yes-btn:hover{background:#ff1a8c;}
 
 .no-btn{
-position:absolute;
-background:transparent;
-border:1px solid #444;
-color:white;
-padding:8px 20px;
-border-radius:50px;
-cursor:pointer;
-z-index:10;
+  position:absolute;
+  background:transparent;
+  border:1px solid #444;
+  color:white;
+  padding:9px 22px;
+  border-radius:50px;
+  cursor:pointer;
+  font-size:14px;
+  z-index:10;
 }
 
-.result{display:none;}
-.result.show{display:flex;flex-direction:column;align-items:center;}
-
-.float{
-position:absolute;
-animation:up 2s forwards;
-}
-@keyframes up{
-to{transform:translateY(-150px);opacity:0;}
+#quiz-inner{
+  animation:fadeIn 0.4s ease;
 }
 
-.confetti{
-position:absolute;
-animation:fall 2s linear forwards;
+@keyframes shake{
+  0%,100%{transform:translateX(0);}
+  20%{transform:translateX(-8px);}
+  40%{transform:translateX(8px);}
+  60%{transform:translateX(-6px);}
+  80%{transform:translateX(6px);}
 }
-@keyframes fall{
-to{transform:translateY(200px) rotate(360deg);opacity:0;}
+.shake{animation:shake 0.4s ease;}
+
+@keyframes bgPulse{
+  0%,100%{background:#0a0a0f;}
+  50%{background:#110818;}
+}
+#wrap.heartbeat{animation:bgPulse 1s ease 3;}
+
+@keyframes ripple{
+  0%{transform:scale(0);opacity:0.8;}
+  100%{transform:scale(60);opacity:0;}
+}
+.ripple-el{
+  position:absolute;
+  width:20px;height:20px;
+  border-radius:50%;
+  background:#ff4da6;
+  pointer-events:none;
+  transform-origin:center;
+  animation:ripple 1s ease forwards;
 }
 
-.big{
-font-size:120px;
-animation:boom 1s ease;
+.float-el{
+  position:absolute;
+  font-size:26px;
+  animation:floatUp 1.8s forwards;
+  pointer-events:none;
 }
+@keyframes floatUp{to{transform:translateY(-240px);opacity:0;}}
+
+.star{
+  position:absolute;
+  width:2px;height:2px;
+  background:white;
+  border-radius:50%;
+  animation:twinkle var(--d,2s) infinite alternate;
+  opacity:0.3;
+}
+@keyframes twinkle{to{opacity:1;transform:scale(1.5);}}
+
+.confetti-el{
+  position:absolute;
+  width:7px;height:7px;
+  animation:confFall 2s linear forwards;
+  pointer-events:none;
+}
+@keyframes confFall{to{transform:translateY(400px) rotate(720deg);opacity:0;}}
+
+#result{display:none;flex-direction:column;align-items:center;}
+#result.show{display:flex;}
+.big{font-size:120px;animation:boom 0.8s ease;}
 @keyframes boom{
-0%{transform:scale(0);}
-100%{transform:scale(1);}
+  0%{transform:scale(0) rotate(-15deg);opacity:0;}
+  60%{transform:scale(1.2) rotate(5deg);}
+  100%{transform:scale(1) rotate(0);opacity:1;}
 }
+
+.orbit-heart{
+  position:absolute;
+  font-size:22px;
+  animation:orbit var(--s,4s) linear infinite;
+}
+@keyframes orbit{
+  from{transform:rotate(0deg) translateX(120px) rotate(0deg);}
+  to{transform:rotate(360deg) translateX(120px) rotate(-360deg);}
+}
+
+#dots{
+  display:flex;gap:8px;margin-bottom:18px;
+}
+.dot{
+  width:8px;height:8px;border-radius:50%;
+  background:#333;transition:background 0.3s,transform 0.3s;
+}
+.dot.active{background:#ff4da6;transform:scale(1.3);}
+.dot.done{background:#7a2244;}
 </style>
 </head>
-
 <body>
 
-<div class="wrap" id="wrap">
+<div id="wrap">
 
-<div class="title">Aadi 💜 Palak</div>
-<div class="date">18 April — The day Aadi proposed Palkuuu 🌷</div>
+  <div id="quiz">
+    <div class="title">Aadi 💜 Palak</div>
+    <div class="date">18 April — The day Aadi proposed Palkuuu 🌷</div>
 
-<div id="quiz">
-<div class="emoj" id="emoj">💜</div>
-<div class="q-text" id="qtext">Will you be mine?</div>
-<div class="q-sub" id="qsub">just say yes 💜</div>
-<button class="yes-btn" onclick="onYes()">Yes 💜</button>
+    <div id="dots"></div>
+
+    <div id="quiz-inner">
+      <div class="emoj" id="emoj">💜</div>
+      <div class="q-text" id="qtext">Will you be mine?</div>
+      <div class="q-sub" id="qsub">just say yes 💜</div>
+    </div>
+
+    <button class="yes-btn" id="yesBtn" onclick="onYes(event)">Yes 💜</button>
+  </div>
+
+  <div id="result">
+    <div class="big">💜</div>
+    <h2 style="color:#f0a0cc;margin-top:12px;font-size:28px;">She said YES 💜</h2>
+    <p style="color:#aaa;margin-top:10px;font-size:15px;">This is just the beginning 🌷</p>
+  </div>
+
+  <button class="no-btn" id="noBtn" onmouseenter="onNoHover()">No 🙅</button>
+
 </div>
 
-<div class="result" id="result">
-<div class="big">💜</div>
-<h2 style="color:#f0a0cc;">She said YES 💜</h2>
-</div>
-
-<button class="no-btn" id="noBtn">No 🙅</button>
-
-<!-- Background music -->
 <audio id="music" loop>
-<source src="[cdn.pixabay.com](https://cdn.pixabay.com/audio/2022/03/15/audio_7b2c86f4b1.mp3)">
+  <source src="baby.mp3" type="audio/mpeg">
 </audio>
 
-</div>
-
 <script>
-/* QUESTIONS */
-let questions=[
-{e:'💜',q:'Will you be mine?',s:'just say yes 💜'},
-{e:'🥺',q:'Please think again...',s:'I really like you 🥺'},
-{e:'🌸',q:'I think about you a lot...',s:'don’t say no 😭'},
-{e:'💌',q:'Let me make you happy?',s:'I promise 🌷'},
-{e:'🥺',q:'Last chance...?',s:'please 🥺'}
+const questions = [
+  {e:'💜', q:'Will you be mine?',           s:'just say yes 💜',       floats:['💜','✨','🌸']},
+  {e:'🥺', q:'Please think again...',        s:'I really like you 🥺',  floats:['🥺','💔','😭']},
+  {e:'🌸', q:'I think about you a lot...',  s:"don't say no 😭",        floats:['🌸','🌷','✨']},
+  {e:'💌', q:'Let me make you happy?',       s:'I promise 🌷',          floats:['💌','🌹','💕']},
+  {e:'🥺', q:'Last chance...?',             s:'please 🥺',              floats:['🥺','💜','🌟']}
 ];
 
-let noCount=0;
-let maxNo=6;
+let noCount = 0;
+const maxNo = 6;
+const noBtn = document.getElementById('noBtn');
+const wrap  = document.getElementById('wrap');
+const music = document.getElementById('music');
 
-let noBtn=document.getElementById("noBtn");
-let music=document.getElementById("music");
-
-function moveBtn(){
-noBtn.style.left=Math.random()*window.innerWidth+"px";
-noBtn.style.top=Math.random()*window.innerHeight+"px";
+/* Starfield */
+for(let i=0;i<60;i++){
+  const s=document.createElement('div');
+  s.className='star';
+  s.style.left=Math.random()*100+'%';
+  s.style.top=Math.random()*100+'%';
+  s.style.setProperty('--d',(1+Math.random()*3)+'s');
+  s.style.width=s.style.height=(Math.random()*2+1)+'px';
+  wrap.appendChild(s);
 }
 
-/* FLOAT ANIMATION */
-function spawn(e){
-for(let i=0;i<4;i++){
-let f=document.createElement("div");
-f.className="float";
-f.innerText=e;
-f.style.left=Math.random()*90+"%";
-f.style.top=Math.random()*70+"%";
-document.getElementById("wrap").appendChild(f);
-setTimeout(()=>f.remove(),2000);
-}
-}
-
-/* CONFETTI */
-function confetti(){
-for(let i=0;i<40;i++){
-let c=document.createElement("div");
-c.className="confetti";
-c.style.width="6px";
-c.style.height="6px";
-c.style.background="pink";
-c.style.left=Math.random()*100+"%";
-c.style.top="20%";
-document.getElementById("wrap").appendChild(c);
-setTimeout(()=>c.remove(),2000);
-}
-}
-
-/* NO BUTTON */
-noBtn.addEventListener("mouseenter",()=>{
-// Redirect after first attempt
-if(noCount===0){
-    setTimeout(()=>{
-        window.open("[youtube.com](https://www.youtube.com/watch?v=kffacxfA7G4)", "_blank"); // official Baby song
-    },1000);
-}
-
-noCount++;
-
-if(noCount>=maxNo){
-noBtn.style.display="none";
-music.pause();
-let babyMusic=new Audio("[cdn.pixabay.com](https://cdn.pixabay.com/audio/2022/03/15/audio_7b2c86f4b1.mp3)");
-babyMusic.play();
-return;
-}
-
-let q=questions[Math.min(noCount,questions.length-1)];
-
-document.getElementById("qtext").innerText=q.q;
-document.getElementById("qsub").innerText=q.s;
-document.getElementById("emoj").innerText=q.e;
-
-spawn(['🌸','💔','✨','🌷'][noCount%4]);
-moveBtn();
+/* Progress dots */
+const dotsEl=document.getElementById('dots');
+questions.forEach((_,i)=>{
+  const d=document.createElement('div');
+  d.className='dot'+(i===0?' active':'');
+  d.id='dot'+i;
+  dotsEl.appendChild(d);
 });
 
-/* YES BUTTON */
-function onYes(){
-document.getElementById("quiz").style.display="none";
-document.getElementById("result").classList.add("show");
-spawn('💜');
-spawn('🌸');
-spawn('✨');
-confetti();
-music.pause();
-setTimeout(()=>{
-    window.open("[youtube.com](https://www.youtube.com/watch?v=kffacxfA7G4)", "_blank"); // Justin Bieber - Baby
-},1500);
+function updateDots(active){
+  questions.forEach((_,i)=>{
+    const d=document.getElementById('dot'+i);
+    d.className='dot'+(i<active?' done':i===active?' active':'');
+  });
 }
 
-moveBtn();
-</script>
+function randomPos(){
+  const bw=noBtn.offsetWidth||90, bh=noBtn.offsetHeight||38;
+  const x=Math.random()*(window.innerWidth-bw);
+  const y=Math.random()*(window.innerHeight-bh);
+  noBtn.style.left=x+'px';
+  noBtn.style.top=y+'px';
+}
 
+function spawn(emojis,count=6){
+  for(let i=0;i<count;i++){
+    const f=document.createElement('div');
+    f.className='float-el';
+    f.innerText=emojis[Math.floor(Math.random()*emojis.length)];
+    f.style.left=Math.random()*85+'%';
+    f.style.top=Math.random()*65+'%';
+    f.style.animationDuration=(1.2+Math.random()*0.8)+'s';
+    wrap.appendChild(f);
+    setTimeout(()=>f.remove(),2100);
+  }
+}
+
+function confetti(count=70){
+  const colors=['#ff4da6','#f0a0cc','#f0d8f0','#ff80bf','#ffd6eb','#ffffff','#ffb3d9'];
+  for(let i=0;i<count;i++){
+    const c=document.createElement('div');
+    c.className='confetti-el';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.left=Math.random()*100+'%';
+    c.style.top='0%';
+    c.style.borderRadius=Math.random()>0.5?'50%':'2px';
+    c.style.animationDelay=(Math.random()*0.5)+'s';
+    wrap.appendChild(c);
+    setTimeout(()=>c.remove(),2600);
+  }
+}
+
+function refreshAnim(){
+  const el=document.getElementById('quiz-inner');
+  el.style.animation='none';
+  el.offsetHeight;
+  el.style.animation='fadeIn 0.4s ease';
+}
+
+function refreshEmojAnim(){
+  const el=document.getElementById('emoj');
+  el.style.animation='none';
+  el.offsetHeight;
+  el.style.animation='emojPop 0.5s ease';
+}
+
+function shakeScreen(){
+  wrap.classList.add('heartbeat');
+  setTimeout(()=>wrap.classList.remove('heartbeat'),3000);
+}
+
+function onNoHover(){
+  noCount++;
+  if(noCount>=maxNo){
+    noBtn.style.display='none';
+    return;
+  }
+  const q=questions[Math.min(noCount,questions.length-1)];
+  document.getElementById('qtext').innerText=q.q;
+  document.getElementById('qsub').innerText=q.s;
+  document.getElementById('emoj').innerText=q.e;
+  refreshAnim();
+  refreshEmojAnim();
+  updateDots(Math.min(noCount,questions.length-1));
+  spawn(q.floats);
+  shakeScreen();
+  noBtn.classList.remove('shake');
+  noBtn.offsetHeight;
+  noBtn.classList.add('shake');
+  setTimeout(()=>noBtn.classList.remove('shake'),500);
+  randomPos();
+}
+
+function onYes(e){
+  const btn=document.getElementById('yesBtn');
+  const rect=btn.getBoundingClientRect();
+  const wRect=wrap.getBoundingClientRect();
+  const rip=document.createElement('div');
+  rip.className='ripple-el';
+  rip.style.left=(rect.left-wRect.left+rect.width/2-10)+'px';
+  rip.style.top=(rect.top-wRect.top+rect.height/2-10)+'px';
+  wrap.appendChild(rip);
+  setTimeout(()=>rip.remove(),1100);
+
+  setTimeout(()=>{
+    document.getElementById('quiz').style.display='none';
+    noBtn.style.display='none';
+    const r=document.getElementById('result');
+    r.classList.add('show');
+    ['💜','🌸','✨','💕','🌷'].forEach((em,i)=>{
+      const h=document.createElement('div');
+      h.className='orbit-heart';
+      h.innerText=em;
+      h.style.setProperty('--s',(3+i*0.5)+'s');
+      h.style.animationDelay=(i*0.3)+'s';
+      r.appendChild(h);
+    });
+    spawn(['💜','🌸','✨','🌷','💕'],10);
+    confetti();
+    setTimeout(()=>{spawn(['💜','🌸','✨'],8);confetti(40);},800);
+    setTimeout(()=>{spawn(['💜','💕','🌷'],8);confetti(40);},1600);
+  },400);
+}
+
+/* Play music on first tap/click anywhere */
+function tryPlay(){
+  music.play().catch(()=>{});
+  document.removeEventListener('click', tryPlay);
+  document.removeEventListener('touchstart', tryPlay);
+}
+document.addEventListener('click', tryPlay);
+document.addEventListener('touchstart', tryPlay);
+
+randomPos();
+</script>
 </body>
 </html>
