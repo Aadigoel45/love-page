@@ -103,37 +103,39 @@ animation:boom 1s ease;
 <script src="https://www.youtube.com/iframe_api"></script>
 
 <script>
-/* ===== YOUTUBE ===== */
 let player;
-let playerReady = false;
-let musicStarted = false;
+let playerReady=false;
 
 function onYouTubeIframeAPIReady(){
-  player = new YT.Player('player',{
-    height:'0',
-    width:'0',
-    videoId:'kffacxfA7G4',
-    playerVars:{controls:0},
-    events:{
-      onReady:function(){
-        playerReady = true;
-      }
-    }
-  });
+player=new YT.Player('player',{
+height:'0',
+width:'0',
+videoId:'kffacxfA7G4',
+playerVars:{
+controls:0,
+autoplay:1
+},
+events:{
+onReady:function(){
+playerReady=true;
+player.seekTo(0);
+player.playVideo();
+}
+}
+});
 }
 
-/* 🔥 START FROM BEGINNING */
-function startMusic(){
-  if(playerReady && player){
-    player.seekTo(0);     // 🔥 START FROM 0:00
-    player.playVideo();
-    musicStarted = true;
-  } else {
-    setTimeout(startMusic, 500);
-  }
+/* FALLBACK (important) */
+window.addEventListener("load",()=>{
+setTimeout(()=>{
+if(playerReady){
+player.seekTo(0);
+player.playVideo();
 }
+},1000);
+});
 
-/* ===== QUESTIONS ===== */
+/* QUESTIONS */
 let questions=[
 {e:'💜',q:'Will you be mine?',s:'just say yes 💜'},
 {e:'🥺',q:'Please think again...',s:'I really like you 🥺'},
@@ -146,13 +148,11 @@ let noCount=0;
 let maxNo=6;
 let noBtn=document.getElementById("noBtn");
 
-/* MOVE BUTTON */
 function moveBtn(){
 noBtn.style.left=Math.random()*window.innerWidth+"px";
 noBtn.style.top=Math.random()*window.innerHeight+"px";
 }
 
-/* FLOAT */
 function spawn(e){
 for(let i=0;i<4;i++){
 let f=document.createElement("div");
@@ -165,7 +165,6 @@ setTimeout(()=>f.remove(),2000);
 }
 }
 
-/* CONFETTI */
 function confetti(){
 for(let i=0;i<40;i++){
 let c=document.createElement("div");
@@ -180,12 +179,7 @@ setTimeout(()=>c.remove(),2000);
 }
 }
 
-/* NO BUTTON */
 noBtn.addEventListener("mouseenter",()=>{
-
-if(!musicStarted){
-  startMusic();
-}
 
 noCount++;
 
@@ -205,9 +199,7 @@ spawn(['🌸','💔','✨','🌷'][noCount%4]);
 moveBtn();
 });
 
-/* YES BUTTON */
 function onYes(){
-
 document.getElementById("quiz").style.display="none";
 document.getElementById("result").classList.add("show");
 
@@ -215,10 +207,6 @@ spawn('💜');
 spawn('🌸');
 spawn('✨');
 confetti();
-
-if(!musicStarted){
-  startMusic();
-}
 }
 
 moveBtn();
