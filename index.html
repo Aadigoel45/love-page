@@ -33,6 +33,7 @@ border:none;
 padding:12px 35px;
 border-radius:50px;
 cursor:pointer;
+z-index:10;
 }
 
 .no-btn{
@@ -43,6 +44,7 @@ color:white;
 padding:8px 20px;
 border-radius:50px;
 cursor:pointer;
+z-index:10;
 }
 
 .result{display:none;}
@@ -96,45 +98,14 @@ animation:boom 1s ease;
 
 <button class="no-btn" id="noBtn">No 🙅</button>
 
-<div id="player"></div>
+<!-- 🎵 AUDIO -->
+<audio id="music" autoplay loop>
+<source src="https://cdn.pixabay.com/audio/2022/03/15/audio_7b2c86f4b1.mp3">
+</audio>
 
 </div>
 
-<script src="https://www.youtube.com/iframe_api"></script>
-
 <script>
-let player;
-let playerReady=false;
-
-function onYouTubeIframeAPIReady(){
-player=new YT.Player('player',{
-height:'0',
-width:'0',
-videoId:'kffacxfA7G4',
-playerVars:{
-controls:0,
-autoplay:1
-},
-events:{
-onReady:function(){
-playerReady=true;
-player.seekTo(0);
-player.playVideo();
-}
-}
-});
-}
-
-/* FALLBACK (important) */
-window.addEventListener("load",()=>{
-setTimeout(()=>{
-if(playerReady){
-player.seekTo(0);
-player.playVideo();
-}
-},1000);
-});
-
 /* QUESTIONS */
 let questions=[
 {e:'💜',q:'Will you be mine?',s:'just say yes 💜'},
@@ -146,13 +117,16 @@ let questions=[
 
 let noCount=0;
 let maxNo=6;
+
 let noBtn=document.getElementById("noBtn");
 
+/* MOVE BUTTON */
 function moveBtn(){
 noBtn.style.left=Math.random()*window.innerWidth+"px";
 noBtn.style.top=Math.random()*window.innerHeight+"px";
 }
 
+/* FLOAT ANIMATION */
 function spawn(e){
 for(let i=0;i<4;i++){
 let f=document.createElement("div");
@@ -165,6 +139,7 @@ setTimeout(()=>f.remove(),2000);
 }
 }
 
+/* CONFETTI */
 function confetti(){
 for(let i=0;i<40;i++){
 let c=document.createElement("div");
@@ -179,6 +154,7 @@ setTimeout(()=>c.remove(),2000);
 }
 }
 
+/* NO BUTTON */
 noBtn.addEventListener("mouseenter",()=>{
 
 noCount++;
@@ -199,7 +175,9 @@ spawn(['🌸','💔','✨','🌷'][noCount%4]);
 moveBtn();
 });
 
+/* YES BUTTON */
 function onYes(){
+
 document.getElementById("quiz").style.display="none";
 document.getElementById("result").classList.add("show");
 
