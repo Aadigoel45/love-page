@@ -22,9 +22,9 @@ position:relative;
 .title{color:#f0a0cc;}
 .date{color:#aaa;font-size:12px;margin-bottom:20px;}
 
-.emoj{font-size:80px;transition:0.3s;}
-.q-text{color:#f0d8f0;font-size:22px;transition:0.3s;}
-.q-sub{color:#aaa;margin-bottom:20px;transition:0.3s;}
+.emoj{font-size:80px;margin-bottom:10px;}
+.q-text{color:#f0d8f0;font-size:22px;}
+.q-sub{color:#aaa;margin-bottom:20px;}
 
 .yes-btn{
 background:#ff4da6;
@@ -33,6 +33,8 @@ border:none;
 padding:12px 35px;
 border-radius:50px;
 cursor:pointer;
+z-index:5;
+position:relative;
 }
 
 .no-btn{
@@ -43,6 +45,7 @@ color:white;
 padding:8px 20px;
 border-radius:50px;
 cursor:pointer;
+z-index:5;
 }
 
 .result{display:none;}
@@ -56,7 +59,7 @@ animation:up 2s forwards;
 to{transform:translateY(-150px);opacity:0;}
 }
 
-.big-heart{
+.big{
 font-size:120px;
 animation:boom 1s ease;
 }
@@ -82,7 +85,7 @@ animation:boom 1s ease;
 </div>
 
 <div class="result" id="result">
-<div class="big-heart">💜</div>
+<div class="big">💜</div>
 <h2 style="color:#f0a0cc;">She said YES 💜</h2>
 </div>
 
@@ -95,7 +98,9 @@ animation:boom 1s ease;
 <script src="https://www.youtube.com/iframe_api"></script>
 
 <script>
+/* ===== YOUTUBE ===== */
 let player;
+let playerReady=false;
 let musicStarted=false;
 
 function onYouTubeIframeAPIReady(){
@@ -103,11 +108,16 @@ player=new YT.Player('player',{
 height:'0',
 width:'0',
 videoId:'kffacxfA7G4',
-playerVars:{controls:0}
+playerVars:{controls:0},
+events:{
+onReady:function(){
+playerReady=true;
+}
+}
 });
 }
 
-/* QUESTIONS */
+/* ===== QUESTIONS ===== */
 let questions=[
 {e:'💜',q:'Will you be mine?',s:'just say yes 💜'},
 {e:'🥺',q:'Please think again...',s:'I really like you 🥺'},
@@ -118,16 +128,18 @@ let questions=[
 
 let noCount=0;
 let maxNo=6;
+
 let noBtn=document.getElementById("noBtn");
 
+/* ===== MOVE BUTTON ===== */
 function moveBtn(){
 noBtn.style.left=Math.random()*window.innerWidth+"px";
 noBtn.style.top=Math.random()*window.innerHeight+"px";
 }
 
-/* FLOAT ANIMATION */
+/* ===== FLOAT ANIMATION ===== */
 function spawn(e){
-for(let i=0;i<5;i++){
+for(let i=0;i<4;i++){
 let f=document.createElement("div");
 f.className="float";
 f.innerText=e;
@@ -138,18 +150,17 @@ setTimeout(()=>f.remove(),2000);
 }
 }
 
-/* NO BUTTON */
+/* ===== NO BUTTON ===== */
 noBtn.addEventListener("mouseenter",()=>{
 
-// MUSIC START ONLY FIRST TIME
-if(!musicStarted && player){
+// PLAY SONG FIRST TIME
+if(!musicStarted && playerReady){
 player.playVideo();
 musicStarted=true;
 }
 
 noCount++;
 
-// LIMIT HOVERS
 if(noCount>=maxNo){
 noBtn.style.display="none";
 return;
@@ -161,25 +172,28 @@ document.getElementById("qtext").innerText=q.q;
 document.getElementById("qsub").innerText=q.s;
 document.getElementById("emoj").innerText=q.e;
 
-// ANIMATION EACH STEP
 spawn(['🌸','💔','✨','🌷'][noCount%4]);
 
 moveBtn();
 });
 
-/* YES BUTTON */
+/* ===== YES BUTTON (FIXED) ===== */
 function onYes(){
 
-document.getElementById("quiz").style.display="none";
-document.getElementById("result").classList.add("show");
+// FORCE UI CHANGE FIRST (fixes bug)
+let quiz=document.getElementById("quiz");
+let result=document.getElementById("result");
+
+quiz.style.display="none";
+result.classList.add("show");
 
 // BIG ANIMATION
 spawn('💜');
 spawn('🌸');
 spawn('✨');
 
-// ensure music plays if not yet
-if(player && !musicStarted){
+// PLAY MUSIC IF NOT STARTED
+if(playerReady && !musicStarted){
 player.playVideo();
 musicStarted=true;
 }
