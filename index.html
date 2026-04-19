@@ -103,7 +103,7 @@ animation:boom 1s ease;
 <script src="https://www.youtube.com/iframe_api"></script>
 
 <script>
-/* ===== YOUTUBE FIXED ===== */
+/* ===== YOUTUBE ===== */
 let player;
 let playerReady = false;
 let musicStarted = false;
@@ -122,10 +122,11 @@ function onYouTubeIframeAPIReady(){
   });
 }
 
-/* 🔥 RELIABLE MUSIC START */
+/* 🔥 START FROM BEGINNING */
 function startMusic(){
   if(playerReady && player){
-    player.playVideo().catch(()=>{});
+    player.seekTo(0);     // 🔥 START FROM 0:00
+    player.playVideo();
     musicStarted = true;
   } else {
     setTimeout(startMusic, 500);
