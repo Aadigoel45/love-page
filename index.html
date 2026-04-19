@@ -34,7 +34,6 @@ padding:12px 35px;
 border-radius:50px;
 cursor:pointer;
 z-index:5;
-position:relative;
 }
 
 .no-btn{
@@ -57,6 +56,14 @@ animation:up 2s forwards;
 }
 @keyframes up{
 to{transform:translateY(-150px);opacity:0;}
+}
+
+.confetti{
+position:absolute;
+animation:fall 2s linear forwards;
+}
+@keyframes fall{
+to{transform:translateY(200px) rotate(360deg);opacity:0;}
 }
 
 .big{
@@ -91,6 +98,7 @@ animation:boom 1s ease;
 
 <button class="no-btn" id="noBtn">No 🙅</button>
 
+<!-- YOUTUBE PLAYER -->
 <div id="player"></div>
 
 </div>
@@ -131,13 +139,13 @@ let maxNo=6;
 
 let noBtn=document.getElementById("noBtn");
 
-/* ===== MOVE BUTTON ===== */
+/* MOVE BUTTON */
 function moveBtn(){
 noBtn.style.left=Math.random()*window.innerWidth+"px";
 noBtn.style.top=Math.random()*window.innerHeight+"px";
 }
 
-/* ===== FLOAT ANIMATION ===== */
+/* FLOAT ANIMATION */
 function spawn(e){
 for(let i=0;i<4;i++){
 let f=document.createElement("div");
@@ -150,10 +158,25 @@ setTimeout(()=>f.remove(),2000);
 }
 }
 
-/* ===== NO BUTTON ===== */
+/* CONFETTI */
+function confetti(){
+for(let i=0;i<40;i++){
+let c=document.createElement("div");
+c.className="confetti";
+c.style.width="6px";
+c.style.height="6px";
+c.style.background="pink";
+c.style.left=Math.random()*100+"%";
+c.style.top="20%";
+document.getElementById("wrap").appendChild(c);
+setTimeout(()=>c.remove(),2000);
+}
+}
+
+/* NO BUTTON */
 noBtn.addEventListener("mouseenter",()=>{
 
-// PLAY SONG FIRST TIME
+// 🎵 PLAY SONG FIRST TIME ONLY
 if(!musicStarted && playerReady){
 player.playVideo();
 musicStarted=true;
@@ -177,22 +200,21 @@ spawn(['🌸','💔','✨','🌷'][noCount%4]);
 moveBtn();
 });
 
-/* ===== YES BUTTON (FIXED) ===== */
+/* YES BUTTON */
 function onYes(){
 
-// FORCE UI CHANGE FIRST (fixes bug)
 let quiz=document.getElementById("quiz");
 let result=document.getElementById("result");
 
 quiz.style.display="none";
 result.classList.add("show");
 
-// BIG ANIMATION
 spawn('💜');
 spawn('🌸');
 spawn('✨');
+confetti();
 
-// PLAY MUSIC IF NOT STARTED
+// ensure music if not started
 if(playerReady && !musicStarted){
 player.playVideo();
 musicStarted=true;
