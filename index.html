@@ -1,375 +1,197 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aadi 💜 Palak</title>
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:#0a0a0f;font-family:sans-serif;overflow:hidden;}
-
-#wrap{
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  position:relative;
-  overflow:hidden;
-}
-
-.title{color:#f0a0cc;font-size:20px;margin-bottom:4px;}
-.date{color:#aaa;font-size:12px;margin-bottom:20px;}
-
-.emoj{
-  font-size:80px;
-  margin-bottom:10px;
-  display:inline-block;
-  animation:emojPop 0.5s ease;
-}
-@keyframes emojPop{
-  0%{transform:scale(0) rotate(-20deg);opacity:0;}
-  70%{transform:scale(1.3) rotate(5deg);}
-  100%{transform:scale(1) rotate(0deg);opacity:1;}
-}
-
-.q-text{
-  color:#f0d8f0;
-  font-size:24px;
-  margin-bottom:6px;
-  animation:slideIn 0.4s ease;
-}
-@keyframes slideIn{
-  0%{transform:translateY(30px);opacity:0;}
-  100%{transform:translateY(0);opacity:1;}
-}
-
-.q-sub{
-  color:#aaa;
-  font-size:14px;
-  margin-bottom:24px;
-  animation:fadeIn 0.6s ease;
-}
-@keyframes fadeIn{
-  0%{opacity:0;}
-  100%{opacity:1;}
-}
-
-.yes-btn{
-  background:#ff4da6;
-  color:white;
-  border:none;
-  padding:13px 38px;
-  border-radius:50px;
-  cursor:pointer;
-  font-size:17px;
-  z-index:10;
-  position:relative;
-  animation:pulse 2s infinite;
-}
-@keyframes pulse{
-  0%{box-shadow:0 0 0 0 rgba(255,77,166,0.5);}
-  70%{box-shadow:0 0 0 14px rgba(255,77,166,0);}
-  100%{box-shadow:0 0 0 0 rgba(255,77,166,0);}
-}
-.yes-btn:hover{background:#ff1a8c;}
-
-.no-btn{
-  position:absolute;
-  background:transparent;
-  border:1px solid #444;
-  color:white;
-  padding:9px 22px;
-  border-radius:50px;
-  cursor:pointer;
-  font-size:14px;
-  z-index:10;
-}
-
-#quiz-inner{
-  animation:fadeIn 0.4s ease;
-}
-
-@keyframes shake{
-  0%,100%{transform:translateX(0);}
-  20%{transform:translateX(-8px);}
-  40%{transform:translateX(8px);}
-  60%{transform:translateX(-6px);}
-  80%{transform:translateX(6px);}
-}
-.shake{animation:shake 0.4s ease;}
-
-@keyframes bgPulse{
-  0%,100%{background:#0a0a0f;}
-  50%{background:#110818;}
-}
-#wrap.heartbeat{animation:bgPulse 1s ease 3;}
-
-@keyframes ripple{
-  0%{transform:scale(0);opacity:0.8;}
-  100%{transform:scale(60);opacity:0;}
-}
-.ripple-el{
-  position:absolute;
-  width:20px;height:20px;
-  border-radius:50%;
-  background:#ff4da6;
-  pointer-events:none;
-  transform-origin:center;
-  animation:ripple 1s ease forwards;
-}
-
-.float-el{
-  position:absolute;
-  font-size:26px;
-  animation:floatUp 1.8s forwards;
-  pointer-events:none;
-}
-@keyframes floatUp{to{transform:translateY(-240px);opacity:0;}}
-
-.star{
-  position:absolute;
-  background:white;
-  border-radius:50%;
-  animation:twinkle var(--d,2s) infinite alternate;
-  opacity:0.3;
-}
-@keyframes twinkle{to{opacity:1;transform:scale(1.5);}}
-
-.confetti-el{
-  position:absolute;
-  width:7px;height:7px;
-  animation:confFall 2s linear forwards;
-  pointer-events:none;
-}
-@keyframes confFall{to{transform:translateY(400px) rotate(720deg);opacity:0;}}
-
-#result{display:none;flex-direction:column;align-items:center;}
-#result.show{display:flex;}
-.big{font-size:120px;animation:boom 0.8s ease;}
-@keyframes boom{
-  0%{transform:scale(0) rotate(-15deg);opacity:0;}
-  60%{transform:scale(1.2) rotate(5deg);}
-  100%{transform:scale(1) rotate(0);opacity:1;}
-}
-
-.orbit-heart{
-  position:absolute;
-  font-size:22px;
-  animation:orbit var(--s,4s) linear infinite;
-}
-@keyframes orbit{
-  from{transform:rotate(0deg) translateX(120px) rotate(0deg);}
-  to{transform:rotate(360deg) translateX(120px) rotate(-360deg);}
-}
-
-#dots{
-  display:flex;gap:8px;margin-bottom:18px;
-}
-.dot{
-  width:8px;height:8px;border-radius:50%;
-  background:#333;transition:background 0.3s,transform 0.3s;
-}
-.dot.active{background:#ff4da6;transform:scale(1.3);}
-.dot.done{background:#7a2244;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  .wrap{min-height:520px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1rem;text-align:center;position:relative;overflow:hidden;background:#0a0a0f;border-radius:20px;}
+  .stars{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
+  .star{position:absolute;background:#fff;border-radius:50%;animation:twinkle 2s infinite alternate;}
+  @keyframes twinkle{from{opacity:0.15;}to{opacity:0.85;}}
+  .emoj{font-size:80px;display:inline-block;margin-bottom:0.8rem;position:relative;z-index:2;}
+  .emoj.idle{animation:sway 3.5s ease-in-out infinite alternate;}
+  .emoj.happy{animation:bop 0.45s ease-in-out infinite alternate;}
+  .emoj.sad{animation:droop 0.9s ease-in-out infinite alternate;}
+  @keyframes sway{from{transform:rotate(-5deg);}to{transform:rotate(5deg);}}
+  @keyframes bop{from{transform:translateY(0)scale(1);}to{transform:translateY(-14px)scale(1.12);}}
+  @keyframes droop{from{transform:rotate(-5deg);}to{transform:rotate(5deg)translateY(6px);}}
+  .name-tag{font-size:11px;color:#7a4a8a;letter-spacing:4px;text-transform:uppercase;margin-bottom:0.6rem;position:relative;z-index:2;}
+  .q-text{font-size:22px;font-weight:500;color:#f0d8f0;line-height:1.6;max-width:340px;margin-bottom:0.45rem;position:relative;z-index:2;min-height:80px;transition:opacity 0.2s;}
+  .q-sub{font-size:13px;color:#7a5090;font-style:italic;margin-bottom:2.2rem;position:relative;z-index:2;min-height:22px;transition:opacity 0.2s;}
+  .yes-btn{background:#7b2d6a;color:#f8e8f8;border:none;border-radius:50px;padding:0.85rem 2.6rem;font-size:18px;cursor:pointer;font-family:var(--font-sans);font-weight:500;transition:transform 0.15s,background 0.2s;box-shadow:0 0 22px rgba(155,60,130,0.45);position:relative;z-index:2;}
+  .yes-btn:hover{transform:scale(1.08);background:#a0336a;box-shadow:0 0 32px rgba(160,51,106,0.65);}
+  .no-btn{background:transparent;color:#3a1a3a;border:1px solid #2a0a2a;border-radius:50px;padding:0.65rem 1.7rem;font-size:14px;cursor:pointer;font-family:var(--font-sans);position:absolute;white-space:nowrap;transition:font-size 0.3s,padding 0.3s,opacity 0.4s;z-index:5;}
+  .hint{font-size:11px;color:#3a1a4a;font-style:italic;margin-top:1.5rem;position:relative;z-index:2;}
+  .nocount{font-size:10px;color:#4a2060;margin-top:0.4rem;position:relative;z-index:2;letter-spacing:1px;}
+  .quiz.hidden{display:none;}
+  .result{display:none;flex-direction:column;align-items:center;position:relative;z-index:2;animation:fadeIn 1.2s ease forwards;}
+  .result.show{display:flex;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+  .ring-wrap{position:relative;width:130px;height:130px;margin-bottom:1rem;}
+  .ring-circle{width:130px;height:130px;border-radius:50%;border:2px solid #5a1a4a;display:flex;align-items:center;justify-content:center;animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(220,80,140,0.4);}50%{box-shadow:0 0 0 18px rgba(220,80,140,0);}}
+  .ring-inner{width:100px;height:100px;border-radius:50%;border:1.5px solid #c0336a;display:flex;align-items:center;justify-content:center;font-size:52px;animation:bop 0.7s ease-in-out infinite alternate;}
+  .res-name{font-size:13px;color:#c060a0;letter-spacing:4px;text-transform:uppercase;margin-bottom:0.3rem;font-weight:500;}
+  .res-line{width:50px;height:1px;background:#2e0e3e;margin:0.6rem auto;}
+  .res-msg{font-size:14px;color:#a070a0;line-height:2;max-width:280px;margin-bottom:1rem;}
+  .res-msg span{color:#f0a0cc;font-weight:500;}
+  .res-sign{font-size:11px;color:#5a2a6a;letter-spacing:2px;font-style:italic;}
+  .floatie{position:absolute;pointer-events:none;animation:floatUp 2.5s ease-out forwards;z-index:10;}
+  @keyframes floatUp{0%{opacity:1;transform:translateY(0)rotate(0deg);}100%{opacity:0;transform:translateY(-160px)rotate(22deg);}}
+  .confetti-dot{position:absolute;border-radius:50%;pointer-events:none;animation:confettiFall linear forwards;}
+  @keyframes confettiFall{0%{opacity:1;transform:translateY(0)rotate(0deg);}100%{opacity:0;transform:translateY(200px)rotate(360deg);}}
 </style>
-</head>
-<body>
 
-<div id="wrap">
+<div class="wrap" id="wrap">
+  <div class="stars" id="stars"></div>
 
-  <div id="quiz">
-    <div class="title">Aadi 💜 Palak</div>
-    <div class="date">18 April — The day Aadi proposed Palkuuu 🌷</div>
+  <div class="quiz" id="quiz">
+    <div class="emoj idle" id="emoj">💜</div>
+    <div class="name-tag">palak 🌷</div>
+    <div class="q-text" id="qtext">Will you be mine?</div>
+    <div class="q-sub" id="qsub">just say yes, I promise it'll be worth it 🌷</div>
+    <button class="yes-btn" onclick="onYes()">Yes 💜</button>
+    <div class="hint">there's a no button... somewhere 👀</div>
+    <div class="nocount" id="nocount"></div>
+  </div>
 
-    <div id="dots"></div>
-
-    <div id="quiz-inner">
-      <div class="emoj" id="emoj">💜</div>
-      <div class="q-text" id="qtext">Will you be mine?</div>
-      <div class="q-sub" id="qsub">just say yes 💜</div>
+  <div class="result" id="result">
+    <div class="ring-wrap">
+      <div class="ring-circle">
+        <div class="ring-inner">🩷</div>
+      </div>
     </div>
-
-    <button class="yes-btn" id="yesBtn" onclick="onYes(event)">Yes 💜</button>
+    <div class="res-name">palkuu 🌷</div>
+    <div class="res-line"></div>
+    <div class="res-msg">
+      honestly, <span>thank you</span>.<br>
+      you have no idea how long<br>
+      I've been holding this feeling.<br><br>
+      I'm so grateful you said yes —<br>
+      I promise I'll make it worth it,<br>
+      <span>every single day</span> 🌷
+    </div>
+    <div class="res-sign">— always yours 🩷</div>
   </div>
 
-  <div id="result">
-    <div class="big">💜</div>
-    <h2 style="color:#f0a0cc;margin-top:12px;font-size:28px;">She said YES 💜</h2>
-    <p style="color:#aaa;margin-top:10px;font-size:15px;">This is just the beginning 🌷</p>
-  </div>
-
-  <button class="no-btn" id="noBtn" onmouseenter="onNoHover()">No 🙅</button>
-
+  <button class="no-btn" id="noBtn" onmouseenter="onNo()" ontouchstart="onNo()">no 🙅</button>
 </div>
 
-<audio id="music" loop>
-  <source src="baby.mp3" type="audio/mpeg">
-</audio>
-
 <script>
-const questions = [
-  {e:'💜', q:'Will you be mine?',           s:'just say yes 💜',       floats:['💜','✨','🌸']},
-  {e:'🥺', q:'Please think again...',        s:'I really like you 🥺',  floats:['🥺','💔','😭']},
-  {e:'🌸', q:'I think about you a lot...',  s:"don't say no 😭",        floats:['🌸','🌷','✨']},
-  {e:'💌', q:'Let me make you happy?',       s:'I promise 🌷',          floats:['💌','🌹','💕']},
-  {e:'🥺', q:'Last chance...?',             s:'please 🥺',              floats:['🥺','💜','🌟']}
+var questions=[
+  {e:'💜',q:'Will you be mine?',s:'just say yes, I promise it\'ll be worth it 🌷'},
+  {e:'🥺',q:'Okay but... will you reconsider?',s:'the no button ran away, maybe you should too 😏'},
+  {e:'🌸',q:'What if I told you I think about you way too often?',s:'still no? really? 👀'},
+  {e:'💌',q:'Will you let someone make you feel special every single day?',s:'that someone being me, obviously 🌷'},
+  {e:'🕯️',q:'What if I already know your yes is in there somewhere?',s:'the no button is getting tired...'},
+  {e:'🌷',q:'Can I be the reason you smile for no reason?',s:'it\'s a simple yes, Palak 🥺'},
+  {e:'💜',q:'Will you give me a chance to be everything you deserve?',s:'the no button is basically invisible now 👻'},
+  {e:'🌸',q:'You\'ve seen me try this hard... doesn\'t that count for something?',s:'even the stars think you should say yes ✨'},
+  {e:'🥺',q:'Last chance... will you be mine?',s:'the no button has left the building 😂'},
+  {e:'💜',q:'It\'s just you and yes now, Palak 🌷',s:'the no is gone. only one option left 😏'},
 ];
+var noCount=0;
+var noBtn=document.getElementById('noBtn');
+var emoj=document.getElementById('emoj');
 
-let noCount = 0;
-const maxNo = 6;
-const noBtn = document.getElementById('noBtn');
-const wrap  = document.getElementById('wrap');
-const music = document.getElementById('music');
-
-/* Starfield */
-for(let i=0;i<60;i++){
-  const s=document.createElement('div');
-  s.className='star';
-  s.style.left=Math.random()*100+'%';
-  s.style.top=Math.random()*100+'%';
-  s.style.setProperty('--d',(1+Math.random()*3)+'s');
-  const size=(Math.random()*2+1)+'px';
-  s.style.width=size;
-  s.style.height=size;
-  wrap.appendChild(s);
-}
-
-/* Progress dots */
-const dotsEl=document.getElementById('dots');
-questions.forEach((_,i)=>{
-  const d=document.createElement('div');
-  d.className='dot'+(i===0?' active':'');
-  d.id='dot'+i;
-  dotsEl.appendChild(d);
-});
-
-function updateDots(active){
-  questions.forEach((_,i)=>{
-    const d=document.getElementById('dot'+i);
-    d.className='dot'+(i<active?' done':i===active?' active':'');
-  });
-}
-
-function randomPos(){
-  const bw=noBtn.offsetWidth||90;
-  const bh=noBtn.offsetHeight||38;
-  const x=Math.random()*(window.innerWidth-bw);
-  const y=Math.random()*(window.innerHeight-bh);
-  noBtn.style.left=x+'px';
-  noBtn.style.top=y+'px';
-}
-
-function spawn(emojis,count=6){
-  for(let i=0;i<count;i++){
-    const f=document.createElement('div');
-    f.className='float-el';
-    f.innerText=emojis[Math.floor(Math.random()*emojis.length)];
-    f.style.left=Math.random()*85+'%';
-    f.style.top=Math.random()*65+'%';
-    f.style.animationDuration=(1.2+Math.random()*0.8)+'s';
-    wrap.appendChild(f);
-    setTimeout(()=>f.remove(),2100);
+function makeStars(){
+  var s=document.getElementById('stars');
+  for(var i=0;i<65;i++){
+    var d=document.createElement('div');
+    d.className='star';
+    var sz=0.8+Math.random()*2.2;
+    d.style.cssText='width:'+sz+'px;height:'+sz+'px;top:'+(Math.random()*100)+'%;left:'+(Math.random()*100)+'%;animation-delay:'+(Math.random()*4)+'s;animation-duration:'+(1.5+Math.random()*2.5)+'s;';
+    s.appendChild(d);
   }
 }
 
-function confetti(count=70){
-  const colors=['#ff4da6','#f0a0cc','#f0d8f0','#ff80bf','#ffd6eb','#ffffff','#ffb3d9'];
-  for(let i=0;i<count;i++){
-    const c=document.createElement('div');
-    c.className='confetti-el';
-    c.style.background=colors[Math.floor(Math.random()*colors.length)];
-    c.style.left=Math.random()*100+'%';
-    c.style.top='0%';
-    c.style.borderRadius=Math.random()>0.5?'50%':'2px';
-    c.style.animationDelay=(Math.random()*0.5)+'s';
-    wrap.appendChild(c);
-    setTimeout(()=>c.remove(),2600);
+function place(){
+  var r=document.getElementById('wrap').getBoundingClientRect();
+  var bw=noBtn.offsetWidth||100;
+  var bh=noBtn.offsetHeight||38;
+  var pad=18;
+  noBtn.style.left=(pad+Math.random()*(r.width-bw-pad*2))+'px';
+  noBtn.style.top=(pad+Math.random()*(r.height-bh-pad*2))+'px';
+}
+
+function onNo(){
+  noCount=Math.min(noCount+1,questions.length-1);
+  var q=questions[noCount];
+  var qt=document.getElementById('qtext');
+  var qs=document.getElementById('qsub');
+  qt.style.opacity='0'; qs.style.opacity='0';
+  setTimeout(function(){
+    qt.textContent=q.q; qs.textContent=q.s;
+    emoj.textContent=q.e;
+    qt.style.opacity='1'; qs.style.opacity='1';
+  },200);
+  emoj.className='emoj sad';
+  setTimeout(function(){emoj.className='emoj idle';},700);
+  var sz=Math.max(9,14-noCount*0.6);
+  var pd1=Math.max(3,10-noCount*0.7);
+  var pd2=Math.max(5,17-noCount*1.2);
+  noBtn.style.fontSize=sz+'px';
+  noBtn.style.padding=pd1+'px '+pd2+'px';
+  noBtn.style.opacity=Math.max(0.06,1-noCount*0.12)+'';
+  if(noCount>=questions.length-1){noBtn.style.display='none';}
+  document.getElementById('nocount').textContent=noCount>1?'the no button escaped '+noCount+' times 🌷':'';
+  place();
+  spawn(['✨','🌷','🩷','🌸','🕯️'][noCount%5]);
+}
+
+function onYes(){
+  emoj.className='emoj happy';
+  spawn('🩷'); spawn('🌸');
+  setTimeout(showResult,500);
+}
+
+function spawn(e){
+  for(var i=0;i<4;i++){
+    (function(ii){
+      setTimeout(function(){
+        var h=document.createElement('div');
+        h.className='floatie';
+        h.textContent=e;
+        h.style.fontSize='18px';
+        h.style.left=(6+Math.random()*86)+'%';
+        h.style.top=(12+Math.random()*58)+'%';
+        document.getElementById('wrap').appendChild(h);
+        setTimeout(function(){h.remove();},2500);
+      },ii*160);
+    })(i);
   }
 }
 
-function refreshAnim(){
-  const el=document.getElementById('quiz-inner');
-  el.style.animation='none';
-  el.offsetHeight;
-  el.style.animation='fadeIn 0.4s ease';
-}
-
-function refreshEmojAnim(){
-  const el=document.getElementById('emoj');
-  el.style.animation='none';
-  el.offsetHeight;
-  el.style.animation='emojPop 0.5s ease';
-}
-
-function shakeScreen(){
-  wrap.classList.add('heartbeat');
-  setTimeout(()=>wrap.classList.remove('heartbeat'),3000);
-}
-
-function onNoHover(){
-  noCount++;
-  if(noCount>=maxNo){
-    noBtn.style.display='none';
-    return;
+function launchConfetti(){
+  var colors=['#e0508a','#c0336a','#f0b0d8','#ff80b0','#ffd0e8'];
+  for(var i=0;i<40;i++){
+    (function(ii){
+      setTimeout(function(){
+        var d=document.createElement('div');
+        d.className='confetti-dot';
+        var sz=4+Math.random()*6;
+        d.style.cssText='width:'+sz+'px;height:'+sz+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';left:'+(10+Math.random()*80)+'%;top:20%;animation-duration:'+(1.2+Math.random()*1.2)+'s;animation-delay:'+ii*0.04+'s;';
+        document.getElementById('wrap').appendChild(d);
+        setTimeout(function(){d.remove();},2500);
+      },ii*30);
+    })(i);
   }
-  const q=questions[Math.min(noCount,questions.length-1)];
-  document.getElementById('qtext').innerText=q.q;
-  document.getElementById('qsub').innerText=q.s;
-  document.getElementById('emoj').innerText=q.e;
-  refreshAnim();
-  refreshEmojAnim();
-  updateDots(Math.min(noCount,questions.length-1));
-  spawn(q.floats);
-  shakeScreen();
-  noBtn.classList.remove('shake');
-  noBtn.offsetHeight;
-  noBtn.classList.add('shake');
-  setTimeout(()=>noBtn.classList.remove('shake'),500);
-  randomPos();
 }
 
-function onYes(e){
-  const btn=document.getElementById('yesBtn');
-  const rect=btn.getBoundingClientRect();
-  const wRect=wrap.getBoundingClientRect();
-  const rip=document.createElement('div');
-  rip.className='ripple-el';
-  rip.style.left=(rect.left-wRect.left+rect.width/2-10)+'px';
-  rip.style.top=(rect.top-wRect.top+rect.height/2-10)+'px';
-  wrap.appendChild(rip);
-  setTimeout(()=>rip.remove(),1100);
-
-  setTimeout(()=>{
-    document.getElementById('quiz').style.display='none';
-    noBtn.style.display='none';
-    const r=document.getElementById('result');
-    r.classList.add('show');
-    ['💜','🌸','✨','💕','🌷'].forEach((em,i)=>{
-      const h=document.createElement('div');
-      h.className='orbit-heart';
-      h.innerText=em;
-      h.style.setProperty('--s',(3+i*0.5)+'s');
-      h.style.animationDelay=(i*0.3)+'s';
-      r.appendChild(h);
-    });
-    spawn(['💜','🌸','✨','🌷','💕'],10);
-    confetti();
-    setTimeout(()=>{spawn(['💜','🌸','✨'],8);confetti(40);},800);
-    setTimeout(()=>{spawn(['💜','💕','🌷'],8);confetti(40);},1600);
-  },400);
+function showResult(){
+  document.getElementById('quiz').classList.add('hidden');
+  noBtn.style.display='none';
+  var res=document.getElementById('result');
+  res.classList.add('show');
+  launchConfetti();
+  setTimeout(launchConfetti,700);
+  for(var i=0;i<14;i++){
+    (function(ii){
+      setTimeout(function(){
+        spawn(['🩷','🌷','🌸','✨','🤍'][ii%5]);
+      },ii*180);
+    })(i);
+  }
 }
 
-/* Auto play on load, fallback to first click/tap */
-window.addEventListener('load', ()=>{
-  music.play().catch(()=>{
-    document.addEventListener('click', ()=>music.play(), {once:true});
-    document.addEventListener('touchstart', ()=>music.play(), {once:true});
-  });
-});
-
-randomPos();
+makeStars();
+setTimeout(function(){place();},120);
+window.addEventListener('resize',place);
 </script>
-</body>
-</html>
