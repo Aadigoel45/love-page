@@ -9,30 +9,92 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:#0a0a0f;font-family:sans-serif;}
 
-.wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;position:relative;overflow:hidden;}
+.wrap{
+min-height:100vh;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+text-align:center;
+position:relative;
+overflow:hidden;
+}
 
-.top{position:absolute;top:15px;width:100%;text-align:center;}
+.top{
+position:absolute;
+top:15px;
+width:100%;
+text-align:center;
+}
 .title{color:#f0a0cc;}
 .date{color:#aaa;font-size:12px;}
 
-.star{position:absolute;background:#fff;border-radius:50%;animation:twinkle 2s infinite alternate;}
-@keyframes twinkle{from{opacity:0.2;}to{opacity:1;}}
+.stars{position:absolute;width:100%;height:100%;}
+.star{
+position:absolute;
+background:#fff;
+border-radius:50%;
+animation:twinkle 2s infinite alternate;
+}
+@keyframes twinkle{
+from{opacity:0.2;}
+to{opacity:1;}
+}
 
 .emoj{font-size:80px;margin-bottom:10px;}
+.emoj.happy{animation:bop 0.5s infinite alternate;}
+.emoj.sad{animation:droop 0.8s infinite alternate;}
+
+@keyframes bop{
+from{transform:translateY(0);}
+to{transform:translateY(-12px);}
+}
+@keyframes droop{
+from{transform:rotate(-5deg);}
+to{transform:rotate(5deg);}
+}
+
 .q-text{color:#f0d8f0;font-size:22px;}
 .q-sub{color:#aaa;margin-bottom:20px;}
 
-.yes-btn{background:#7b2d6a;color:white;border:none;border-radius:50px;padding:12px 35px;font-size:18px;cursor:pointer;}
-.no-btn{position:absolute;border:1px solid #444;color:white;background:transparent;border-radius:50px;padding:8px 20px;cursor:pointer;}
+.yes-btn{
+background:#7b2d6a;
+color:white;
+border:none;
+border-radius:50px;
+padding:12px 35px;
+cursor:pointer;
+}
+
+.no-btn{
+position:absolute;
+background:transparent;
+border:1px solid #444;
+color:white;
+border-radius:50px;
+padding:8px 20px;
+cursor:pointer;
+}
 
 .result{display:none;}
 .result.show{display:flex;flex-direction:column;align-items:center;}
 
-.floatie{position:absolute;pointer-events:none;animation:floatUp 2.5s forwards;}
-@keyframes floatUp{to{transform:translateY(-150px);opacity:0;}}
+.floatie{
+position:absolute;
+animation:floatUp 2.5s forwards;
+}
+@keyframes floatUp{
+to{transform:translateY(-150px);opacity:0;}
+}
 
-.confetti-dot{position:absolute;border-radius:50%;animation:fall linear forwards;}
-@keyframes fall{to{transform:translateY(200px) rotate(360deg);opacity:0;}}
+.confetti-dot{
+position:absolute;
+border-radius:50%;
+animation:fall linear forwards;
+}
+@keyframes fall{
+to{transform:translateY(200px) rotate(360deg);opacity:0;}
+}
 </style>
 </head>
 
@@ -44,6 +106,8 @@ body{background:#0a0a0f;font-family:sans-serif;}
 <div class="title">Aadi 💜 Palak</div>
 <div class="date">18 April — The day Aadi proposed Palkuuu 🌷</div>
 </div>
+
+<div class="stars" id="stars"></div>
 
 <div id="quiz">
 <div class="emoj" id="emoj">💜</div>
@@ -65,109 +129,126 @@ body{background:#0a0a0f;font-family:sans-serif;}
 <script src="https://www.youtube.com/iframe_api"></script>
 
 <script>
-/* ================= MUSIC ================= */
+/* ========= YOUTUBE ========= */
 let player;
 let musicStarted=false;
 
 function onYouTubeIframeAPIReady(){
-  player=new YT.Player('player',{
-    height:'0',
-    width:'0',
-    videoId:'kffacxfA7G4',
-    playerVars:{controls:0}
-  });
+player=new YT.Player('player',{
+height:'0',
+width:'0',
+videoId:'kffacxfA7G4',
+playerVars:{controls:0}
+});
 }
 
-/* ================= QUESTIONS ================= */
+/* ========= QUESTIONS ========= */
 var questions=[
-  {e:'💜',q:'Will you be mine?',s:'just say yes 💜'},
-  {e:'🥺',q:'Okay but... will you reconsider?',s:'please 🥺'},
-  {e:'🌸',q:'What if I told you I think about you way too often?',s:'still no? 👀'},
-  {e:'💌',q:'Will you let me make you happy everyday?',s:'I promise 🌷'},
-  {e:'🥺',q:'Last chance... will you be mine?',s:'please 🥺'}
+{e:'💜',q:'Will you be mine?',s:'just say yes 💜'},
+{e:'🥺',q:'Okay but... will you reconsider?',s:'please 🥺'},
+{e:'🌸',q:'I think about you a lot...',s:'still no? 👀'},
+{e:'💌',q:'Let me make you happy?',s:'🌷'},
+{e:'🥺',q:'Last chance...?',s:'please 🥺'}
 ];
 
 var noCount=0;
 var noBtn=document.getElementById('noBtn');
 var emoj=document.getElementById('emoj');
 
-/* ================= FLOAT EMOJIS ================= */
-function spawn(e){
-  for(let i=0;i<4;i++){
-    let h=document.createElement('div');
-    h.className='floatie';
-    h.textContent=e;
-    h.style.left=(10+Math.random()*80)+'%';
-    h.style.top=(20+Math.random()*60)+'%';
-    document.getElementById('wrap').appendChild(h);
-    setTimeout(()=>h.remove(),2500);
-  }
+/* ========= STARS ========= */
+function makeStars(){
+let s=document.getElementById('stars');
+for(let i=0;i<60;i++){
+let d=document.createElement('div');
+d.className='star';
+d.style.width='2px';
+d.style.height='2px';
+d.style.top=Math.random()*100+'%';
+d.style.left=Math.random()*100+'%';
+s.appendChild(d);
+}
 }
 
-/* ================= NO BUTTON ================= */
+/* ========= MOVE BUTTON ========= */
+function place(){
+noBtn.style.left=Math.random()*window.innerWidth+'px';
+noBtn.style.top=Math.random()*window.innerHeight+'px';
+}
+
+/* ========= FLOATIES ========= */
+function spawn(e){
+for(let i=0;i<4;i++){
+let h=document.createElement('div');
+h.className='floatie';
+h.textContent=e;
+h.style.left=Math.random()*90+'%';
+h.style.top=Math.random()*60+'%';
+document.getElementById('wrap').appendChild(h);
+setTimeout(()=>h.remove(),2500);
+}
+}
+
+/* ========= NO BUTTON ========= */
 noBtn.addEventListener("mouseenter",function(){
 
-  // 🎵 START MUSIC ON FIRST HOVER ONLY
-  if(!musicStarted && player){
-    player.playVideo();
-    musicStarted=true;
-  }
+// START MUSIC FIRST TIME
+if(!musicStarted && player){
+player.playVideo();
+musicStarted=true;
+}
 
-  noCount=Math.min(noCount+1,questions.length-1);
-  let q=questions[noCount];
+noCount=Math.min(noCount+1,questions.length-1);
+let q=questions[noCount];
 
-  document.getElementById('qtext').innerText=q.q;
-  document.getElementById('qsub').innerText=q.s;
-  emoj.innerText=q.e;
+document.getElementById('qtext').innerText=q.q;
+document.getElementById('qsub').innerText=q.s;
+emoj.innerText=q.e;
 
-  spawn(['✨','🌷','🩷','🌸'][noCount%4]);
+emoj.className='emoj sad';
+setTimeout(()=>emoj.className='emoj',600);
 
-  // move button
-  noBtn.style.left=Math.random()*window.innerWidth+'px';
-  noBtn.style.top=Math.random()*window.innerHeight+'px';
+place();
+spawn(['🌸','💔','✨','🌷'][noCount%4]);
 });
 
-/* ================= YES BUTTON ================= */
+/* ========= YES BUTTON ========= */
 function onYes(){
-  document.getElementById('quiz').style.display='none';
-  document.getElementById('result').classList.add('show');
+document.getElementById('quiz').style.display='none';
+document.getElementById('result').classList.add('show');
 
-  spawn('💜');
-  launchConfetti();
+emoj.className='emoj happy';
 
-  // if she didn't hover, still play music
-  if(player && !musicStarted){
-    player.playVideo();
-    musicStarted=true;
-  }
+spawn('💜');
+spawn('🌸');
+
+launchConfetti();
+
+// ensure music plays even if she clicks yes first
+if(player && !musicStarted){
+player.playVideo();
+musicStarted=true;
+}
 }
 
-/* ================= CONFETTI ================= */
+/* ========= CONFETTI ========= */
 function launchConfetti(){
-  for(let i=0;i<40;i++){
-    let d=document.createElement('div');
-    d.className='confetti-dot';
-    d.style.width='6px';
-    d.style.height='6px';
-    d.style.background='pink';
-    d.style.left=Math.random()*100+'%';
-    d.style.top='20%';
-    d.style.animationDuration=(1+Math.random())+'s';
-    document.getElementById('wrap').appendChild(d);
-    setTimeout(()=>d.remove(),2000);
-  }
+for(let i=0;i<50;i++){
+let d=document.createElement('div');
+d.className='confetti-dot';
+d.style.width='6px';
+d.style.height='6px';
+d.style.background='pink';
+d.style.left=Math.random()*100+'%';
+d.style.top='20%';
+d.style.animationDuration=(1+Math.random())+'s';
+document.getElementById('wrap').appendChild(d);
+setTimeout(()=>d.remove(),2000);
+}
 }
 
-/* ================= STARS ================= */
-for(let i=0;i<60;i++){
-  let d=document.createElement('div');
-  d.className='star';
-  d.style.width='2px';
-  d.style.height='2px';
-  d.style.top=Math.random()*100+'%';
-  d.style.left=Math.random()*100+'%';
-  document.getElementById('wrap').appendChild(d);
-}
+/* INIT */
+makeStars();
+setTimeout(place,200);
 </script>
 
 </body>
