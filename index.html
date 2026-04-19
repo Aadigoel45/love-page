@@ -204,8 +204,8 @@ body{background:#0a0a0f;font-family:sans-serif;overflow:hidden;}
 
 </div>
 
-<audio id="music" loop crossorigin="anonymous">
-  <source src="https://drive.google.com/uc?export=download&id=18SaVEm80SZqmS3lXUv4Viq46fFgLl9Ov" type="audio/mpeg">
+<audio id="music" loop>
+  <source src="baby.mp3" type="audio/mpeg">
 </audio>
 
 <script>
@@ -361,14 +361,13 @@ function onYes(e){
   },400);
 }
 
-/* Play Baby by Justin Bieber on first click/tap */
-function tryPlay(){
-  music.play().catch(()=>{});
-  document.removeEventListener('click', tryPlay);
-  document.removeEventListener('touchstart', tryPlay);
-}
-document.addEventListener('click', tryPlay);
-document.addEventListener('touchstart', tryPlay);
+/* Auto play on load, fallback to first click/tap */
+window.addEventListener('load', ()=>{
+  music.play().catch(()=>{
+    document.addEventListener('click', ()=>music.play(), {once:true});
+    document.addEventListener('touchstart', ()=>music.play(), {once:true});
+  });
+});
 
 randomPos();
 </script>
