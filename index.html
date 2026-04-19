@@ -98,9 +98,9 @@ animation:boom 1s ease;
 
 <button class="no-btn" id="noBtn">No 🙅</button>
 
-<!-- 🎵 AUDIO -->
-<audio id="music" autoplay loop>
-<source src="https://cdn.pixabay.com/audio/2022/03/15/audio_7b2c86f4b1.mp3">
+<!-- Background music -->
+<audio id="music" loop>
+<source src="[cdn.pixabay.com](https://cdn.pixabay.com/audio/2022/03/15/audio_7b2c86f4b1.mp3)">
 </audio>
 
 </div>
@@ -119,8 +119,8 @@ let noCount=0;
 let maxNo=6;
 
 let noBtn=document.getElementById("noBtn");
+let music=document.getElementById("music");
 
-/* MOVE BUTTON */
 function moveBtn(){
 noBtn.style.left=Math.random()*window.innerWidth+"px";
 noBtn.style.top=Math.random()*window.innerHeight+"px";
@@ -156,11 +156,20 @@ setTimeout(()=>c.remove(),2000);
 
 /* NO BUTTON */
 noBtn.addEventListener("mouseenter",()=>{
+// Redirect after first attempt
+if(noCount===0){
+    setTimeout(()=>{
+        window.open("[youtube.com](https://www.youtube.com/watch?v=kffacxfA7G4)", "_blank"); // official Baby song
+    },1000);
+}
 
 noCount++;
 
 if(noCount>=maxNo){
 noBtn.style.display="none";
+music.pause();
+let babyMusic=new Audio("[cdn.pixabay.com](https://cdn.pixabay.com/audio/2022/03/15/audio_7b2c86f4b1.mp3)");
+babyMusic.play();
 return;
 }
 
@@ -171,20 +180,21 @@ document.getElementById("qsub").innerText=q.s;
 document.getElementById("emoj").innerText=q.e;
 
 spawn(['🌸','💔','✨','🌷'][noCount%4]);
-
 moveBtn();
 });
 
 /* YES BUTTON */
 function onYes(){
-
 document.getElementById("quiz").style.display="none";
 document.getElementById("result").classList.add("show");
-
 spawn('💜');
 spawn('🌸');
 spawn('✨');
 confetti();
+music.pause();
+setTimeout(()=>{
+    window.open("[youtube.com](https://www.youtube.com/watch?v=kffacxfA7G4)", "_blank"); // Justin Bieber - Baby
+},1500);
 }
 
 moveBtn();
