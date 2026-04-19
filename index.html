@@ -7,27 +7,42 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:#0a0a0f;font-family:sans-serif;overflow:hidden;}
-.wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;}
+body{background:#0a0a0f;font-family:sans-serif;}
 
-.top{position:absolute;top:20px;text-align:center;}
-.title{color:#f0a0cc;font-size:20px;}
-.date{color:#aaa;font-size:13px;}
+.wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1rem;text-align:center;position:relative;overflow:hidden;}
+
+.top{position:absolute;top:15px;width:100%;text-align:center;z-index:3;}
+.title{color:#f0a0cc;font-size:16px;}
+.date{color:#aaa;font-size:12px;}
 
 .stars{position:absolute;width:100%;height:100%;}
-.star{position:absolute;background:white;border-radius:50%;animation:twinkle 2s infinite alternate;}
-@keyframes twinkle{from{opacity:0.2;}to{opacity:1;}}
+.star{position:absolute;background:#fff;border-radius:50%;animation:twinkle 2s infinite alternate;}
+@keyframes twinkle{from{opacity:0.15;}to{opacity:0.85;}}
 
-.emoj{font-size:80px;margin-bottom:10px;}
-.q-text{color:#f0d8f0;font-size:22px;}
-.q-sub{color:#aaa;font-size:13px;margin-bottom:20px;}
+.emoj{font-size:80px;margin-bottom:0.8rem;}
+.emoj.idle{animation:sway 3.5s infinite alternate;}
+.emoj.happy{animation:bop 0.45s infinite alternate;}
+.emoj.sad{animation:droop 0.9s infinite alternate;}
 
-.yes-btn{background:#ff4da6;color:white;border:none;border-radius:50px;padding:12px 40px;font-size:18px;cursor:pointer;}
-.no-btn{position:absolute;background:transparent;border:1px solid #555;color:white;border-radius:50px;padding:8px 20px;cursor:pointer;}
+@keyframes sway{from{transform:rotate(-5deg);}to{transform:rotate(5deg);}}
+@keyframes bop{from{transform:translateY(0);}to{transform:translateY(-14px) scale(1.1);}}
+@keyframes droop{from{transform:rotate(-5deg);}to{transform:rotate(5deg) translateY(6px);}}
+
+.name-tag{font-size:11px;color:#7a4a8a;margin-bottom:0.5rem;}
+.q-text{font-size:22px;color:#f0d8f0;margin-bottom:5px;}
+.q-sub{font-size:13px;color:#7a5090;margin-bottom:20px;}
+
+.yes-btn{background:#7b2d6a;color:#fff;border:none;border-radius:50px;padding:12px 35px;font-size:18px;cursor:pointer;}
+.no-btn{position:absolute;background:transparent;border:1px solid #444;color:#fff;border-radius:50px;padding:8px 20px;cursor:pointer;}
 
 .result{display:none;}
-.result.show{display:block;color:#f0a0cc;}
+.result.show{display:flex;flex-direction:column;align-items:center;}
 
+.floatie{position:absolute;animation:floatUp 2.5s forwards;}
+@keyframes floatUp{to{transform:translateY(-150px);opacity:0;}}
+
+.confetti-dot{position:absolute;border-radius:50%;animation:fall linear forwards;}
+@keyframes fall{to{transform:translateY(200px) rotate(360deg);opacity:0;}}
 </style>
 </head>
 
@@ -42,79 +57,134 @@ body{background:#0a0a0f;font-family:sans-serif;overflow:hidden;}
 
 <div class="stars" id="stars"></div>
 
-<div id="quiz">
-<div class="emoj" id="emoj">💜</div>
+<div class="quiz" id="quiz">
+<div class="emoj idle" id="emoj">💜</div>
+<div class="name-tag">palak 🌷</div>
 <div class="q-text" id="qtext">Will you be mine?</div>
 <div class="q-sub" id="qsub">just say yes 💜</div>
 <button class="yes-btn" onclick="onYes()">Yes 💜</button>
 </div>
 
 <div class="result" id="result">
-<h1>She said YES 💜</h1>
-<p>Our forever starts today 🌷</p>
+<h2 style="color:#f0a0cc;">She said YES 💜</h2>
 </div>
 
-<button class="no-btn" id="noBtn" onmouseover="onNo()">No 🙅</button>
+<button class="no-btn" id="noBtn" onmouseenter="onNo()">No 🙅</button>
 
-<!-- 🎵 REAL SONG -->
-<audio id="music" loop>
-<source src="https://cdn.pixabay.com/audio/2023/03/14/audio_7a1d6b82a6.mp3">
-</audio>
+<!-- YOUTUBE PLAYER -->
+<div id="player" style="display:none;"></div>
 
 </div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
 
 <script>
 var questions=[
 {e:'💜',q:'Will you be mine?',s:'just say yes 💜'},
-{e:'🥺',q:'Please think again...',s:'I really mean it 😔'},
-{e:'🌸',q:'I think about you a lot...',s:'don’t say no 😭'},
-{e:'💌',q:'Let me make you happy everyday?',s:'I’ll try my best 🌷'},
-{e:'🥺',q:'Last chance... will you be mine?',s:'please 🥺'}
+{e:'🥺',q:'Please reconsider...',s:'🥺'},
+{e:'🌸',q:'I think about you a lot...',s:'still no? 👀'},
+{e:'💌',q:'Let me make you happy?',s:'🌷'},
+{e:'🥺',q:'Last chance...?',s:'please'}
 ];
 
 var noCount=0;
-var noBtn=document.getElementById("noBtn");
-var emoj=document.getElementById("emoj");
+var noBtn=document.getElementById('noBtn');
+var emoj=document.getElementById('emoj');
 
 function makeStars(){
-let s=document.getElementById("stars");
+let s=document.getElementById('stars');
 for(let i=0;i<60;i++){
-let d=document.createElement("div");
-d.className="star";
-d.style.width="2px";
-d.style.height="2px";
-d.style.top=Math.random()*100+"%";
-d.style.left=Math.random()*100+"%";
+let d=document.createElement('div');
+d.className='star';
+d.style.width='2px';
+d.style.height='2px';
+d.style.top=Math.random()*100+'%';
+d.style.left=Math.random()*100+'%';
 s.appendChild(d);
 }
 }
 
-function moveBtn(){
-noBtn.style.left=Math.random()*window.innerWidth+"px";
-noBtn.style.top=Math.random()*window.innerHeight+"px";
+function place(){
+let r=document.getElementById('wrap').getBoundingClientRect();
+noBtn.style.left=Math.random()*r.width+'px';
+noBtn.style.top=Math.random()*r.height+'px';
 }
 
 function onNo(){
 noCount=Math.min(noCount+1,questions.length-1);
 let q=questions[noCount];
+document.getElementById('qtext').textContent=q.q;
+document.getElementById('qsub').textContent=q.s;
+emoj.textContent=q.e;
 
-document.getElementById("qtext").innerText=q.q;
-document.getElementById("qsub").innerText=q.s;
-emoj.innerText=q.e;
+emoj.className='emoj sad';
+setTimeout(()=>emoj.className='emoj idle',600);
 
-moveBtn();
+place();
+spawn('💔');
 }
 
 function onYes(){
-document.getElementById("quiz").style.display="none";
-document.getElementById("result").classList.add("show");
+emoj.className='emoj happy';
+spawn('💜');
+setTimeout(showResult,500);
 
-let music=document.getElementById("music");
-music.play();
+if(player) player.playVideo();
 }
 
+function spawn(e){
+for(let i=0;i<4;i++){
+let h=document.createElement('div');
+h.className='floatie';
+h.textContent=e;
+h.style.left=Math.random()*90+'%';
+h.style.top=Math.random()*60+'%';
+document.getElementById('wrap').appendChild(h);
+setTimeout(()=>h.remove(),2500);
+}
+}
+
+function showResult(){
+document.getElementById('quiz').style.display='none';
+noBtn.style.display='none';
+document.getElementById('result').classList.add('show');
+launchConfetti();
+}
+
+function launchConfetti(){
+for(let i=0;i<40;i++){
+let d=document.createElement('div');
+d.className='confetti-dot';
+d.style.width='6px';
+d.style.height='6px';
+d.style.background='pink';
+d.style.left=Math.random()*100+'%';
+d.style.top='20%';
+d.style.animationDuration=(1+Math.random())+'s';
+document.getElementById('wrap').appendChild(d);
+setTimeout(()=>d.remove(),2000);
+}
+}
+
+/* YOUTUBE PLAYER */
+var player;
+function onYouTubeIframeAPIReady(){
+player=new YT.Player('player',{
+height:'0',
+width:'0',
+videoId:'kffacxfA7G4',
+playerVars:{autoplay:0,controls:0}
+});
+}
+
+/* PLAY ON FIRST CLICK */
+document.body.addEventListener("click",()=>{
+if(player) player.playVideo();
+},{once:true});
+
 makeStars();
-setTimeout(moveBtn,300);
+setTimeout(place,200);
+window.addEventListener('resize',place);
 </script>
 
 </body>
