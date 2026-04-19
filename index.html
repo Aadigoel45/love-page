@@ -130,7 +130,6 @@ body{background:#0a0a0f;font-family:sans-serif;overflow:hidden;}
 
 .star{
   position:absolute;
-  width:2px;height:2px;
   background:white;
   border-radius:50%;
   animation:twinkle var(--d,2s) infinite alternate;
@@ -205,8 +204,8 @@ body{background:#0a0a0f;font-family:sans-serif;overflow:hidden;}
 
 </div>
 
-<audio id="music" loop>
-  <source src="baby.mp3" type="audio/mpeg">
+<audio id="music" loop crossorigin="anonymous">
+  <source src="https://drive.google.com/uc?export=download&id=18SaVEm80SZqmS3lXUv4Viq46fFgLl9Ov" type="audio/mpeg">
 </audio>
 
 <script>
@@ -231,7 +230,9 @@ for(let i=0;i<60;i++){
   s.style.left=Math.random()*100+'%';
   s.style.top=Math.random()*100+'%';
   s.style.setProperty('--d',(1+Math.random()*3)+'s');
-  s.style.width=s.style.height=(Math.random()*2+1)+'px';
+  const size=(Math.random()*2+1)+'px';
+  s.style.width=size;
+  s.style.height=size;
   wrap.appendChild(s);
 }
 
@@ -252,7 +253,8 @@ function updateDots(active){
 }
 
 function randomPos(){
-  const bw=noBtn.offsetWidth||90, bh=noBtn.offsetHeight||38;
+  const bw=noBtn.offsetWidth||90;
+  const bh=noBtn.offsetHeight||38;
   const x=Math.random()*(window.innerWidth-bw);
   const y=Math.random()*(window.innerHeight-bh);
   noBtn.style.left=x+'px';
@@ -359,7 +361,7 @@ function onYes(e){
   },400);
 }
 
-/* Play music on first tap/click anywhere */
+/* Play Baby by Justin Bieber on first click/tap */
 function tryPlay(){
   music.play().catch(()=>{});
   document.removeEventListener('click', tryPlay);
