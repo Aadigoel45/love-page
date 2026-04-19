@@ -33,7 +33,6 @@ border:none;
 padding:12px 35px;
 border-radius:50px;
 cursor:pointer;
-z-index:5;
 }
 
 .no-btn{
@@ -44,7 +43,6 @@ color:white;
 padding:8px 20px;
 border-radius:50px;
 cursor:pointer;
-z-index:5;
 }
 
 .result{display:none;}
@@ -98,7 +96,6 @@ animation:boom 1s ease;
 
 <button class="no-btn" id="noBtn">No 🙅</button>
 
-<!-- YOUTUBE PLAYER -->
 <div id="player"></div>
 
 </div>
@@ -106,23 +103,33 @@ animation:boom 1s ease;
 <script src="https://www.youtube.com/iframe_api"></script>
 
 <script>
-/* ===== YOUTUBE ===== */
+/* ===== YOUTUBE FIXED ===== */
 let player;
-let playerReady=false;
-let musicStarted=false;
+let playerReady = false;
+let musicStarted = false;
 
 function onYouTubeIframeAPIReady(){
-player=new YT.Player('player',{
-height:'0',
-width:'0',
-videoId:'kffacxfA7G4',
-playerVars:{controls:0},
-events:{
-onReady:function(){
-playerReady=true;
+  player = new YT.Player('player',{
+    height:'0',
+    width:'0',
+    videoId:'kffacxfA7G4',
+    playerVars:{controls:0},
+    events:{
+      onReady:function(){
+        playerReady = true;
+      }
+    }
+  });
 }
-}
-});
+
+/* 🔥 RELIABLE MUSIC START */
+function startMusic(){
+  if(playerReady && player){
+    player.playVideo().catch(()=>{});
+    musicStarted = true;
+  } else {
+    setTimeout(startMusic, 500);
+  }
 }
 
 /* ===== QUESTIONS ===== */
@@ -136,7 +143,6 @@ let questions=[
 
 let noCount=0;
 let maxNo=6;
-
 let noBtn=document.getElementById("noBtn");
 
 /* MOVE BUTTON */
@@ -145,7 +151,7 @@ noBtn.style.left=Math.random()*window.innerWidth+"px";
 noBtn.style.top=Math.random()*window.innerHeight+"px";
 }
 
-/* FLOAT ANIMATION */
+/* FLOAT */
 function spawn(e){
 for(let i=0;i<4;i++){
 let f=document.createElement("div");
@@ -176,10 +182,8 @@ setTimeout(()=>c.remove(),2000);
 /* NO BUTTON */
 noBtn.addEventListener("mouseenter",()=>{
 
-// 🎵 PLAY SONG FIRST TIME ONLY
-if(!musicStarted && playerReady){
-player.playVideo();
-musicStarted=true;
+if(!musicStarted){
+  startMusic();
 }
 
 noCount++;
@@ -203,21 +207,16 @@ moveBtn();
 /* YES BUTTON */
 function onYes(){
 
-let quiz=document.getElementById("quiz");
-let result=document.getElementById("result");
-
-quiz.style.display="none";
-result.classList.add("show");
+document.getElementById("quiz").style.display="none";
+document.getElementById("result").classList.add("show");
 
 spawn('💜');
 spawn('🌸');
 spawn('✨');
 confetti();
 
-// ensure music if not started
-if(playerReady && !musicStarted){
-player.playVideo();
-musicStarted=true;
+if(!musicStarted){
+  startMusic();
 }
 }
 
